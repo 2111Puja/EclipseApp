@@ -1,18 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 import React from 'react';
-
-// Define the MenuItem types
-type MenuItem = {
-  name: string;
-  description: string;
-  price: number;
-};
+import { MenuItem } from './types';
 
 export default function App() {
-  // Define the type of the MenuItem
-  const [menuItems] = useState<MenuItem[]>([
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([
     { name: 'Smoked Salmon Crostini', description: 'Delicate smoked salmon elegantly placed on toasted crostini, garnished with a touch of lemon zest and a drizzle of dill-infused cream.', price: 180 },
     { name: 'Caprese Salad', description: 'A classic Italian dish made with the freshest heirloom tomatoes, creamy buffalo mozzarella, and fragrant basil leaves, finished with a drizzle of extra virgin olive oil.', price: 150 },
     { name: 'Shrimp Cocktail', description: 'Plump, succulent shrimp served chilled with a zesty homemade cocktail sauce and a hint of horseradish, presented on a bed of crisp lettuce.', price: 190 },
@@ -24,22 +17,53 @@ export default function App() {
     { name: 'Caramel Swirl Spongecake', description: 'Light and airy sponge cake marbled with ribbons of caramel, finished with a drizzle of caramel sauce and a side of vanilla bean ice cream.', price: 160 },
   ]);
 
-  const totalMenuItems: number = menuItems.length;
+  const [itemName, setItemName] = useState<string>('');
+  const [itemDescription, setItemDescription] = useState<string>('');
+  const [itemPrice, setItemPrice] = useState<string>('');
 
-  const handleNextPress = (): void => {
-    console.log('Next button pressed');
+  const handleSubmit = () => {
+    if (itemName && itemDescription && itemPrice) {
+      const newItem: MenuItem = {
+        name: itemName,
+        description: itemDescription,
+        price: parseFloat(itemPrice),
+      };
+      setMenuItems([...menuItems, newItem]);
+      setItemName('');
+      setItemDescription('');
+      setItemPrice('');
+    }
+  };
+
+  const totalMenuItems = menuItems.length;
+
+  const handleNextPress = () => {
+    console.log("Next button pressed");
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.headingContainer}>
-        <Text style={styles.appTitle}>Chef's Menu</Text>
+      
+      {/* Header */}
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerTitle}>Eclipse</Text>
       </View>
 
+      <View style={styles.homeButtonContainer}>
+        <TouchableOpacity style={styles.homeButton}>
+          <Text style={styles.homeButtonText}>Home</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.menuTitleContainer}>
+        <Text style={styles.menuTitle}>Menu:</Text>
+      </View>
+
+      {/* Menu Items */}
       <FlatList
         data={menuItems}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Text style={styles.itemText}>
@@ -51,8 +75,9 @@ export default function App() {
 
       <Text style={styles.totalItems}>Total Menu Items: {totalMenuItems}</Text>
 
+      {/* Next Button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNextPress}>
-        <Text style={styles.buttonText}>Next</Text>
+        <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -61,42 +86,71 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f3e5ab',
-    padding: 20,
+    backgroundColor: '#f7b546', 
+    padding: 10,
   },
-  headingContainer: {
-    marginBottom: 20,
+  headerContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  headerTitle: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#000',
+    textShadowColor: '#ffeb3b', 
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
+  },
+  homeButtonContainer: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  homeButton: {
+    backgroundColor: '#ffe478', 
+    padding: 10,
+    borderRadius: 10,
+  },
+  homeButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  menuTitleContainer: {
+    marginVertical: 10,
     alignItems: 'center',
   },
-  appTitle: {
+  menuTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#d2691e',
+    color: '#000',
   },
   itemContainer: {
+    backgroundColor: '#f3b156',  
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ff6347',
+    marginBottom: 5,
+    borderRadius: 10,
   },
   itemText: {
     fontSize: 16,
-    color: '#d2691e',
-  },
-  totalItems: {
-    marginTop: 20,
-    textAlign: 'center',
-    fontSize: 16,
+    fontWeight: 'bold',
     color: '#000',
   },
-  nextButton: {
-    marginTop: 20,
-    backgroundColor: '#4682b4',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
+  totalItems: {
+    marginVertical: 10,
+    fontSize: 16,
+    color: '#000',
+    textAlign: 'center',
   },
-  buttonText: {
-    color: 'white',
+  nextButton: {
+    backgroundColor: '#ffd700',  
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  nextButtonText: {
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#000',
   },
 });
