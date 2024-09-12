@@ -1,33 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import { useState } from 'react';
+import { Picker } from '@react-native-picker/picker';
 import React from 'react';
 
 // Define the MenuItem types
 type MenuItem = {
   name: string;
   description: string;
+  course: string;
   price: number;
 };
 
 export default function App() {
-  // Define the type of the MenuItem
-  const [menuItems] = useState<MenuItem[]>([
-    { name: 'Smoked Salmon Crostini', description: 'Delicate smoked salmon elegantly placed on toasted crostini, garnished with a touch of lemon zest and a drizzle of dill-infused cream.', price: 180 },
-    { name: 'Caprese Salad', description: 'A classic Italian dish made with the freshest heirloom tomatoes, creamy buffalo mozzarella, and fragrant basil leaves, finished with a drizzle of extra virgin olive oil.', price: 150 },
-    { name: 'Shrimp Cocktail', description: 'Plump, succulent shrimp served chilled with a zesty homemade cocktail sauce and a hint of horseradish, presented on a bed of crisp lettuce.', price: 190 },
-    { name: 'Lamb Chops', description: 'Tender, herb-crusted lamb chops, grilled to perfection and served with a rosemary and red wine jus. Accompanied by truffle mashed potatoes and seasonal vegetables.', price: 450 },
-    { name: 'Vegetarian Risotto', description: 'A creamy Arborio rice risotto infused with a medley of wild mushrooms, truffle oil, and parmesan cheese, garnished with fresh herbs and a sprinkle of toasted pine nuts.', price: 320 },
-    { name: 'Garlic Butter Lobster Tail', description: 'Succulent lobster tail, perfectly baked and smothered in a rich garlic butter sauce, served with a side of saffron-infused risotto and grilled asparagus.', price: 620 },
-    { name: 'Chocolate Mudpie', description: 'A decadent, rich chocolate mudpie with a velvety ganache filling, topped with a dusting of cocoa powder and a dollop of freshly whipped cream.', price: 150 },
-    { name: 'Lemon Tart', description: 'A zesty lemon tart with a buttery shortcrust pastry, topped with a light meringue and a sprinkle of candied lemon zest. The perfect balance of sweet and tart.', price: 140 },
-    { name: 'Caramel Swirl Spongecake', description: 'Light and airy sponge cake marbled with ribbons of caramel, finished with a drizzle of caramel sauce and a side of vanilla bean ice cream.', price: 160 },
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([
+    { name: 'Smoked Salmon Crostini', description: 'Delicate smoked salmon elegantly placed on toasted crostini, garnished with a touch of lemon zest and a drizzle of dill-infused cream.', course: 'Starters', price: 180 },
+    { name: 'Caprese Salad', description: 'A classic Italian dish made with the freshest heirloom tomatoes, creamy buffalo mozzarella, and fragrant basil leaves, finished with a drizzle of extra virgin olive oil.', course: 'Starters', price: 150 },
+    { name: 'Lamb Chops', description: 'Tender, herb-crusted lamb chops, grilled to perfection and served with a rosemary and red wine jus.', course: 'Main', price: 450 },
+    { name: 'Chocolate Mudpie', description: 'A decadent, rich chocolate mudpie with a velvety ganache filling, topped with a dusting of cocoa powder and a dollop of freshly whipped cream.', course: 'Desserts', price: 150 },
   ]);
+
+  // New dish states
+  const [newDishName, setNewDishName] = useState('');
+  const [newDishDescription, setNewDishDescription] = useState('');
+  const [newDishCourse, setNewDishCourse] = useState('Starters');
+  const [newDishPrice, setNewDishPrice] = useState('');
 
   const totalMenuItems: number = menuItems.length;
 
-  const handleNextPress = (): void => {
-    console.log('Next button pressed');
+  const handleAddDish = () => {
+    const newDish: MenuItem = {
+      name: newDishName,
+      description: newDishDescription,
+      course: newDishCourse,
+      price: parseFloat(newDishPrice),
+    };
+
+    setMenuItems([...menuItems, newDish]);
+    // Clear the input fields after submission
+    setNewDishName('');
+    setNewDishDescription('');
+    setNewDishPrice('');
   };
 
   return (
@@ -43,7 +56,7 @@ export default function App() {
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Text style={styles.itemText}>
-              {item.name} - {item.description} - R{item.price.toFixed(2)}
+              {item.name} - {item.description} ({item.course}) - R{item.price.toFixed(2)}
             </Text>
           </View>
         )}
@@ -51,9 +64,41 @@ export default function App() {
 
       <Text style={styles.totalItems}>Total Menu Items: {totalMenuItems}</Text>
 
-      <TouchableOpacity style={styles.nextButton} onPress={handleNextPress}>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
+      {/* Input Fields to Add a New Dish */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Dish Name"
+          value={newDishName}
+          onChangeText={setNewDishName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Dish Description"
+          value={newDishDescription}
+          onChangeText={setNewDishDescription}
+        />
+        <Picker
+          selectedValue={newDishCourse}
+          style={styles.picker}
+          onValueChange={(itemValue) => setNewDishCourse(itemValue)}
+        >
+          <Picker.Item label="Starters" value="Starters" />
+          <Picker.Item label="Main" value="Main" />
+          <Picker.Item label="Desserts" value="Desserts" />
+        </Picker>
+        <TextInput
+          style={styles.input}
+          placeholder="Price"
+          keyboardType="numeric"
+          value={newDishPrice}
+          onChangeText={setNewDishPrice}
+        />
+
+        <TouchableOpacity style={styles.addButton} onPress={handleAddDish}>
+          <Text style={styles.buttonText}>Add Dish</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -88,8 +133,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
   },
-  nextButton: {
+  inputContainer: {
     marginTop: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: '#d2691e',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingLeft: 8,
+  },
+  picker: {
+    height: 50,
+    marginBottom: 10,
+  },
+  addButton: {
     backgroundColor: '#4682b4',
     padding: 10,
     borderRadius: 5,
