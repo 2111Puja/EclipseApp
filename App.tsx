@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import { useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import React from 'react';
 
@@ -13,14 +13,7 @@ type MenuItem = {
 };
 
 export default function App() {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
-    { name: 'Smoked Salmon Crostini', description: 'Delicate smoked salmon elegantly placed on toasted crostini, garnished with a touch of lemon zest and a drizzle of dill-infused cream.', course: 'Starters', price: 180 },
-    { name: 'Caprese Salad', description: 'A classic Italian dish made with the freshest heirloom tomatoes, creamy buffalo mozzarella, and fragrant basil leaves, finished with a drizzle of extra virgin olive oil.', course: 'Starters', price: 150 },
-    { name: 'Lamb Chops', description: 'Tender, herb-crusted lamb chops, grilled to perfection and served with a rosemary and red wine jus.', course: 'Main', price: 450 },
-    { name: 'Chocolate Mudpie', description: 'A decadent, rich chocolate mudpie with a velvety ganache filling, topped with a dusting of cocoa powder and a dollop of freshly whipped cream.', course: 'Desserts', price: 150 },
-  ]);
-
-  // New dish states
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newDishName, setNewDishName] = useState('');
   const [newDishDescription, setNewDishDescription] = useState('');
   const [newDishCourse, setNewDishCourse] = useState('Starters');
@@ -28,7 +21,27 @@ export default function App() {
 
   const totalMenuItems: number = menuItems.length;
 
+  // Fetch menu items from an API (replace with your actual API endpoint)
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await fetch('https://api.example.com/menuItems'); // Replace with your API URL
+        const data = await response.json();
+        setMenuItems(data);  // Assuming the API returns an array of menu items
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
+    };
+
+    fetchMenuItems();
+  }, []); // Empty array means this effect runs once on component mount
+
   const handleAddDish = () => {
+    if (!newDishPrice || isNaN(parseFloat(newDishPrice))) {
+      alert("Please enter a valid price");
+      return;
+    }
+
     const newDish: MenuItem = {
       name: newDishName,
       description: newDishDescription,
@@ -37,6 +50,7 @@ export default function App() {
     };
 
     setMenuItems([...menuItems, newDish]);
+
     // Clear the input fields after submission
     setNewDishName('');
     setNewDishDescription('');
@@ -64,7 +78,7 @@ export default function App() {
 
       <Text style={styles.totalItems}>Total Menu Items: {totalMenuItems}</Text>
 
-      /* Input Fields to Add a New Dish */
+      {/* Input Fields to Add a New Dish */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
