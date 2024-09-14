@@ -64,7 +64,7 @@ export default function App() {
 
       <Text style={styles.totalItems}>Total Menu Items: {totalMenuItems}</Text>
 
-      {/* Input Fields to Add a New Dish */}
+      /* Input Fields to Add a New Dish */
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
