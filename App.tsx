@@ -33,16 +33,16 @@ export default function App() {
   const totalMenuItems: number = menuItems.length;
 
   // Fetch additional menu items from an external source
-  //code attribution
-  //Dev community, 2024
-  //Fetch with typescript
-  //Dev
-  //https://dev.to/simonireilly/fetch-with-typescript-for-better-http-api-clients-2d71
-  //[Accessed 14 September 2024].
+  // code attribution
+  // Dev community, 2024
+  // Fetch with TypeScript
+  // Dev
+  // https://dev.to/simonireilly/fetch-with-typescript-for-better-http-api-clients-2d71
+  // [Accessed 14 September 2024].
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch('https://api.chefapp.com/menuItems'); 
+        const response = await fetch('https://api.chefapp.com/menuItems');
         const data = await response.json();
 
         // Merging fetched data with hardcoded initial dishes
@@ -53,7 +53,7 @@ export default function App() {
     };
 
     fetchMenuItems();
-  }, []); 
+  }, []);
 
   // Function to add new dish
   const handleAddDish = () => {
@@ -128,12 +128,14 @@ export default function App() {
           value={newDishPrice}
           onChangeText={setNewDishPrice}
         />
-  //code attribution
-  //Stackflow, 2024
-  //How to use Typescript on a button click
-  //Stackflow
-  //https://stackoverflow.com/questions/25152463/how-to-use-typescript-on-a-button-click
-  //[Accessed 14 September 2024].
+
+        {/* code attribution
+         * Stackflow, 2024
+         * How to use TypeScript on a button click
+         * Stackflow
+         * https://stackoverflow.com/questions/25152463/how-to-use-typescript-on-a-button-click
+         * [Accessed 14 September 2024].
+         */}
 
         <TouchableOpacity style={styles.addButton} onPress={handleAddDish}>
           <Text style={styles.buttonText}>Add Dish</Text>
