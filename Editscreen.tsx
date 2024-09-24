@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { MenuItem } from './types';
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 
-
-export default function EditScreen({ navigation }) {
+export default function EditScreen({ navigation }: { navigation: any }) {
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
   const [itemPrice, setItemPrice] = useState('');
@@ -44,6 +42,12 @@ export default function EditScreen({ navigation }) {
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
+  // code attribution
+  // Stackflow, 2024
+  // Typescript: onPress type
+  // Stackflow
+  // https://stackoverflow.com/questions/59901680/typescript-onpress-type
+  // [Accessed 16 September 2024].
     </SafeAreaView>
   );
 }

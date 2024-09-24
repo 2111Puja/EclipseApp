@@ -79,6 +79,12 @@ export default function App() {
       <TouchableOpacity style={styles.nextButton} onPress={handleNextPress}>
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
+  // code attribution
+  // Stackflow, 2024
+  // Typescript: onPress type
+  // Stackflow
+  // https://stackoverflow.com/questions/59901680/typescript-onpress-type
+  // [Accessed 16 September 2024].
     </SafeAreaView>
   );
 }

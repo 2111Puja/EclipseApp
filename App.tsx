@@ -57,6 +57,15 @@ export default function App() {
 
   // Function to add new dish
   const handleAddDish = () => {
+    // Validation for dish name and description
+    if (!newDishName) {
+      alert("Please enter a dish name");
+      return;
+    }
+    if (!newDishDescription) {
+      alert("Please enter a dish description");
+      return;
+    }
     if (!newDishPrice || isNaN(parseFloat(newDishPrice))) {
       alert("Please enter a valid price");
       return;
@@ -129,13 +138,13 @@ export default function App() {
           onChangeText={setNewDishPrice}
         />
 
-        {/* code attribution
+        /* code attribution
          * Stackflow, 2024
          * How to use TypeScript on a button click
          * Stackflow
          * https://stackoverflow.com/questions/25152463/how-to-use-typescript-on-a-button-click
          * [Accessed 14 September 2024].
-         */}
+         */
 
         <TouchableOpacity style={styles.addButton} onPress={handleAddDish}>
           <Text style={styles.buttonText}>Add Dish</Text>
