@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 
-export default function EditScreen({ navigation }: { navigation: any }) {
-  const [itemName, setItemName] = useState('');
-  const [itemDescription, setItemDescription] = useState('');
-  const [itemPrice, setItemPrice] = useState('');
+interface EditScreenProps {
+  navigation: any;
+  route: {
+    params: {
+      itemName: string;
+      itemDescription: string;
+      itemPrice: string;
+      onSave: (updatedItem: { itemName: string; itemDescription: string; itemPrice: string }) => void;
+    };
+  };
+}
+
+export default function EditScreen({ navigation, route }: EditScreenProps) {
+  const { itemName: initialItemName, itemDescription: initialItemDescription, itemPrice: initialItemPrice, onSave } = route.params;
+
+  // Initialize state with passed parameters
+  const [itemName, setItemName] = useState(initialItemName);
+  const [itemDescription, setItemDescription] = useState(initialItemDescription);
+  const [itemPrice, setItemPrice] = useState(initialItemPrice);
 
   const handleSave = () => {
-    // Handle saving the new item logic here
-    // For example, you could send this data to a server or state management solution
-    console.log("New Item Saved:", { itemName, itemDescription, itemPrice });
+    const updatedItem = { itemName, itemDescription, itemPrice };
+    onSave(updatedItem); // Call the onSave function from the previous screen
     navigation.goBack(); // Go back to the previous screen
   };
 
@@ -42,12 +56,6 @@ export default function EditScreen({ navigation }: { navigation: any }) {
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
-  // code attribution
-  // Stackflow, 2024
-  // Typescript: onPress type
-  // Stackflow
-  // https://stackoverflow.com/questions/59901680/typescript-onpress-type
-  // [Accessed 16 September 2024].
     </SafeAreaView>
   );
 }
@@ -86,3 +94,11 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 });
+
+/*
+  Code attribution:
+  - Stack Overflow, 2024
+  - TypeScript: onPress type
+  - Source: https://stackoverflow.com/questions/59901680/typescript-onpress-type
+  - Accessed: 16 September 2024
+*/

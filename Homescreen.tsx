@@ -2,10 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 import React from 'react';
-import { MenuItem } from './types';
 
 export default function App() {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
+  const [menuItems, setMenuItems] = useState([
     { name: 'Smoked Salmon Crostini', description: 'Delicate smoked salmon elegantly placed on toasted crostini, garnished with a touch of lemon zest and a drizzle of dill-infused cream.', price: 180 },
     { name: 'Caprese Salad', description: 'A classic Italian dish made with the freshest heirloom tomatoes, creamy buffalo mozzarella, and fragrant basil leaves, finished with a drizzle of extra virgin olive oil.', price: 150 },
     { name: 'Shrimp Cocktail', description: 'Plump, succulent shrimp served chilled with a zesty homemade cocktail sauce and a hint of horseradish, presented on a bed of crisp lettuce.', price: 190 },
@@ -17,13 +16,13 @@ export default function App() {
     { name: 'Caramel Swirl Spongecake', description: 'Light and airy sponge cake marbled with ribbons of caramel, finished with a drizzle of caramel sauce and a side of vanilla bean ice cream.', price: 160 },
   ]);
 
-  const [itemName, setItemName] = useState<string>('');
-  const [itemDescription, setItemDescription] = useState<string>('');
-  const [itemPrice, setItemPrice] = useState<string>('');
+  const [itemName, setItemName] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
+  const [itemPrice, setItemPrice] = useState('');
 
   const handleSubmit = () => {
     if (itemName && itemDescription && itemPrice) {
-      const newItem: MenuItem = {
+      const newItem = {
         name: itemName,
         description: itemDescription,
         price: parseFloat(itemPrice),
@@ -38,7 +37,7 @@ export default function App() {
   const totalMenuItems = menuItems.length;
 
   const handleNextPress = () => {
-    console.log("Next button pressed");
+    console.log('Next button pressed');
   };
 
   return (
@@ -47,7 +46,7 @@ export default function App() {
       
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Eclipse</Text>
+        <Text style={styles.headerTitle}>Eclipse Restaurant</Text>
       </View>
 
       <View style={styles.homeButtonContainer}>
@@ -79,12 +78,6 @@ export default function App() {
       <TouchableOpacity style={styles.nextButton} onPress={handleNextPress}>
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
-  // code attribution
-  // Stackflow, 2024
-  // Typescript: onPress type
-  // Stackflow
-  // https://stackoverflow.com/questions/59901680/typescript-onpress-type
-  // [Accessed 16 September 2024].
     </SafeAreaView>
   );
 }
@@ -92,7 +85,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f7b546', 
+    backgroundColor: '#f7b546',
     padding: 10,
   },
   headerContainer: {
@@ -103,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     color: '#000',
-    textShadowColor: '#ffeb3b', 
+    textShadowColor: '#ffeb3b',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
@@ -112,7 +105,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   homeButton: {
-    backgroundColor: '#ffe478', 
+    backgroundColor: '#ffe478',
     padding: 10,
     borderRadius: 10,
   },
@@ -131,7 +124,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   itemContainer: {
-    backgroundColor: '#f3b156',  
+    backgroundColor: '#f3b156',
     padding: 10,
     marginBottom: 5,
     borderRadius: 10,
@@ -148,7 +141,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   nextButton: {
-    backgroundColor: '#ffd700',  
+    backgroundColor: '#ffd700',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
