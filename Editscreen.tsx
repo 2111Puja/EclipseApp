@@ -12,7 +12,13 @@ interface EditScreenProps {
     };
   };
 }
-
+/*
+  Code attribution:
+  - Stack Overflow, 2024
+  - TypeScript: onPress type
+  - Source: https://stackoverflow.com/questions/59901680/typescript-onpress-type
+  - Accessed: 16 September 2024
+*/
 export default function EditScreen({ navigation, route }: EditScreenProps) {
   const { itemName: initialItemName, itemDescription: initialItemDescription, itemPrice: initialItemPrice, onSave } = route.params;
 
@@ -95,10 +101,3 @@ const styles = StyleSheet.create({
   },
 });
 
-/*
-  Code attribution:
-  - Stack Overflow, 2024
-  - TypeScript: onPress type
-  - Source: https://stackoverflow.com/questions/59901680/typescript-onpress-type
-  - Accessed: 16 September 2024
-*/
