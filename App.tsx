@@ -141,11 +141,13 @@ export default function App() {
   IIEVC School of Computer Science
   https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
   [Accessed 28 September 2024]. */
+
+  //Styles for the app UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f3e5ab',
-    marginVertical: 1,
+    marginVertical: 1, //margin for the container
     padding: 20,
   },
   headingContainer: {
