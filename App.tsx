@@ -13,8 +13,7 @@ type MenuItem = {
 };
 
 export default function App() {
-  const initialDishes: MenuItem[] = [
-  ];
+  const initialDishes: MenuItem[] = [];
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialDishes);
 
@@ -25,36 +24,15 @@ export default function App() {
   const [newDishPrice, setNewDishPrice] = useState('');
 
   const totalMenuItems: number = menuItems.length;
-
-  /* Fetch additional menu items from an external source
-     Dev community, 2024
-     Fetch with TypeScript
-     Dev
-     https://dev.to/simonireilly/fetch-with-typescript-for-better-http-api-clients-2d71
-     [Accessed 14 September 2024]. */
-
-  // Fetch additional menu items from an external source
-  useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const response = await fetch('https://api.chefapp.com/menuItems');
-        const data: MenuItem[] = await response.json();
-
-        if (Array.isArray(data)) {
-          setMenuItems([...initialDishes, ...data]);
-        } else {
-          console.error('Fetched data is not an array of menu items');
-        }
-      } catch (error) {
-        console.error('Error fetching menu items:', error);
-      }
-    };
-
-    fetchMenuItems();
-  }, []);
-
+  
   // Function to add a new dish
   const handleAddDish = () => {
+    // Validation: Check if any fields are empty
+    if (!newDishName || !newDishDescription) {
+      alert('Please fill out all fields.');
+      return;
+    }
+
     if (!newDishPrice || isNaN(parseFloat(newDishPrice))) {
       alert('Please enter a valid price');
       return;
@@ -131,6 +109,11 @@ export default function App() {
           value={newDishPrice}
           onChangeText={setNewDishPrice}
         />
+{/*Stackoverflow, 2024
+  React typescript onClick event typing
+  Stackoverflow
+  https://stackoverflow.com/questions/70907199/react-typescript-onclick-event-typing
+  [Accessed 30 September 2024].*/}
 
         <TouchableOpacity style={styles.addButton} onPress={handleAddDish}>
           <Text style={styles.buttonText}>Add Dish</Text>
@@ -140,11 +123,11 @@ export default function App() {
   );
 }
 
-/* IIEVC School of Computer Science, 2024
+{/* IIEVC School of Computer Science, 2024
    MAST5112 Guru 02 - Basic UI Design React Native UI Components Fitness Tracker
    IIEVC School of Computer Science
    https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
-   [Accessed 28 September 2024]. */
+   [Accessed 28 September 2024]. */}
 
 // Styles for the app UI
 const styles = StyleSheet.create({
