@@ -19,7 +19,7 @@ export default function App() {
     { name: 'Lamb Chops', description: 'Tender, herb-crusted lamb chops, grilled to perfection and served with a rosemary and red wine.', course: 'Main', price: 450 },
     { name: 'Chocolate Mudpie', description: 'A decadent, rich chocolate mudpie with a velvety ganache filling, topped with a dusting of cocoa powder and a dollop of freshly whipped cream.', course: 'Desserts', price: 150 },
   ];
- 
+
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialDishes);
 
   // New dish states
@@ -29,21 +29,26 @@ export default function App() {
   const [newDishPrice, setNewDishPrice] = useState('');
 
   const totalMenuItems: number = menuItems.length;
-  /*Fetch additional menu items from an external source
-  Dev community, 2024
-  Fetch with TypeScript
-  Dev
-  https://dev.to/simonireilly/fetch-with-typescript-for-better-http-api-clients-2d71
-  [Accessed 14 September 2024]. */
+
+  /* Fetch additional menu items from an external source
+     Dev community, 2024
+     Fetch with TypeScript
+     Dev
+     https://dev.to/simonireilly/fetch-with-typescript-for-better-http-api-clients-2d71
+     [Accessed 14 September 2024]. */
 
   // Fetch additional menu items from an external source
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch('https://api.chefapp.com/menuItems');
-        const data = await response.json();
+        const data: MenuItem[] = await response.json();
 
-        setMenuItems([...initialDishes, ...data]);
+        if (Array.isArray(data)) {
+          setMenuItems([...initialDishes, ...data]);
+        } else {
+          console.error('Fetched data is not an array of menu items');
+        }
       } catch (error) {
         console.error('Error fetching menu items:', error);
       }
@@ -53,10 +58,9 @@ export default function App() {
   }, []);
 
   // Function to add a new dish
-  
   const handleAddDish = () => {
     if (!newDishPrice || isNaN(parseFloat(newDishPrice))) {
-      alert("Please enter a valid price");
+      alert('Please enter a valid price');
       return;
     }
 
@@ -84,12 +88,15 @@ export default function App() {
 
       <FlatList
         data={menuItems}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.name + item.price}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Text style={styles.itemText}>
               {item.name} - {item.description} ({item.course}) - R{item.price.toFixed(2)}
             </Text>
+            <View style={styles.priceContainer}>
+              <Text style={styles.priceText}>R{item.price.toFixed(2)}</Text>
+            </View>
           </View>
         )}
       />
@@ -136,13 +143,14 @@ export default function App() {
     </SafeAreaView>
   );
 }
-/*IIEVC School of Computer Science, 2024
-  MAST5112 Guru 02 - Basic UI Design React Native UI Components Fitness Tracker
-  IIEVC School of Computer Science
-  https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
-  [Accessed 28 September 2024]. */
 
-  //Styles for the app UI
+/* IIEVC School of Computer Science, 2024
+   MAST5112 Guru 02 - Basic UI Design React Native UI Components Fitness Tracker
+   IIEVC School of Computer Science
+   https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
+   [Accessed 28 September 2024]. */
+
+// Styles for the app UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -175,6 +183,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#d2691e',
   },
+
+  priceContainer: {
+    backgroundColor: '#ffdb13',
+    padding: 5,
+    borderRadius: 10,
+    marginTop: 5,
+  },
+
+  priceText: {
+    fontSize: 18,
+    color: '#b9a119',
+
+  },
+
   totalItems: {
     marginTop: 20,
     textAlign: 'center',
