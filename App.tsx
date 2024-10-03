@@ -14,10 +14,6 @@ type MenuItem = {
 
 export default function App() {
   const initialDishes: MenuItem[] = [
-    { name: 'Smoked Salmon Crostini', description: 'Delicate smoked salmon elegantly placed on toasted crostini, garnished with a touch of lemon zest and a drizzle of dill-infused cream.', course: 'Starters', price: 180 },
-    { name: 'Caprese Salad', description: 'A classic Italian dish made with the freshest heirloom tomatoes, creamy buffalo mozzarella, and fragrant basil leaves, finished with a drizzle of extra virgin olive oil.', course: 'Starters', price: 150 },
-    { name: 'Lamb Chops', description: 'Tender, herb-crusted lamb chops, grilled to perfection and served with a rosemary and red wine.', course: 'Main', price: 450 },
-    { name: 'Chocolate Mudpie', description: 'A decadent, rich chocolate mudpie with a velvety ganache filling, topped with a dusting of cocoa powder and a dollop of freshly whipped cream.', course: 'Desserts', price: 150 },
   ];
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialDishes);
@@ -92,7 +88,7 @@ export default function App() {
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Text style={styles.itemText}>
-              {item.name} - {item.description} ({item.course}) - R{item.price.toFixed(2)}
+              {item.name} - {item.description} ({item.course})
             </Text>
             <View style={styles.priceContainer}>
               <Text style={styles.priceText}>R{item.price.toFixed(2)}</Text>
@@ -189,11 +185,13 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 10,
     marginTop: 5,
+  
   },
 
   priceText: {
     fontSize: 18,
-    color: '#b9a119',
+    color: 'black',
+    fontWeight: 'bold',
 
   },
 
