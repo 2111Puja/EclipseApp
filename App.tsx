@@ -34,7 +34,7 @@ export default function App() {
     }
 
     if (!newDishPrice || isNaN(parseFloat(newDishPrice))) {
-      alert('Please enter a valid price');
+      alert('Please enter a valid price'); //Enters a new dish to the menu
       return;
     }
 
@@ -60,7 +60,7 @@ export default function App() {
         <Text style={styles.appName}>Eclipse Restaurant Menu</Text>
       </View>
 
-      <FlatList
+      <FlatList //renders a scrollable view on the screen
         data={menuItems}
         keyExtractor={(item) => item.name + item.price}
         renderItem={({ item }) => (
@@ -98,9 +98,9 @@ export default function App() {
           style={styles.picker}
           onValueChange={(itemValue) => setNewDishCourse(itemValue)}
         >
-          <Picker.Item label="Starters" value="Starters" />
-          <Picker.Item label="Main" value="Main" />
-          <Picker.Item label="Desserts" value="Desserts" />
+          <Picker.Item label="Starters" value="Starters" />  //displays starters on the picker
+          <Picker.Item label="Main" value="Main" />  //displays mains on the picker
+          <Picker.Item label="Desserts" value="Desserts" />  //displays desserts on the picker
         </Picker>
         <TextInput
           style={styles.input}
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   headingContainer: {
     backgroundColor: '#ffb756',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 20, //creates a margin for the heading container
     alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 10,
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
 
   totalItems: {
-    marginTop: 20,
+    marginTop: 20, //adds a margin to the total items
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    marginBottom: 12,
+    marginBottom: 12, //creates a margin for the picker container
     borderColor: '#d2691e',
     borderWidth: 1,
     borderRadius: 8,
