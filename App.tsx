@@ -98,9 +98,9 @@ export default function App() {
           style={styles.picker}
           onValueChange={(itemValue) => setNewDishCourse(itemValue)}
         >
-          <Picker.Item label="Starters" value="Starters" />  //displays starters on the picker
-          <Picker.Item label="Main" value="Main" />  //displays mains on the picker
-          <Picker.Item label="Desserts" value="Desserts" />  //displays desserts on the picker
+          <Picker.Item label="Starters" value="Starters" /> 
+          <Picker.Item label="Main" value="Main" />  
+          <Picker.Item label="Desserts" value="Desserts" />  
         </Picker>
         <TextInput
           style={styles.input}
