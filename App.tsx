@@ -1,146 +1,136 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import React from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import ManageMenuScreen from './ManageMenuScreen'; // Import your ManageMenuScreen
+import { MenuItem, RootStackParamList } from './types'; // Import types
 
-// Define the MenuItem types
-type MenuItem = {
-  name: string;
-  description: string;
-  course: string;
-  price: number;
+// Create the stack navigator
+const Stack = createStackNavigator<RootStackParamList>();
+
+// Function to calculate average price for each course
+const calculateAveragePrice = (items: MenuItem[], course: string) => {
+  const filteredItems = items.filter(item => item.course === course);
+  if (filteredItems.length === 0) return 0;
+  const totalPrice = filteredItems.reduce((sum, item) => sum + item.price, 0);
+  return totalPrice / filteredItems.length;
 };
 
+// Main App component
 export default function App() {
-  const initialDishes: MenuItem[] = [];
-
+  const initialDishes: MenuItem[] = []; // Initial state for menu items
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialDishes);
+  const [filter, setFilter] = useState<string>(''); // For course filtering
 
-  // New dish states
-  const [newDishName, setNewDishName] = useState('');
-  const [newDishDescription, setNewDishDescription] = useState('');
-  const [newDishCourse, setNewDishCourse] = useState('Starters');
-  const [newDishPrice, setNewDishPrice] = useState('');
+  // Filter menu items based on the selected course
+  const filteredMenuItems = filter
+    ? menuItems.filter(item => item.course === filter)
+    : menuItems;
 
-  const totalMenuItems: number = menuItems.length;
-  
-  // Function to add a new dish
-  const handleAddDish = () => {
-    // Validation: Check if any fields are empty
-    if (!newDishName || !newDishDescription) {
-      alert('Please fill out all fields.');
-      return;
-    }
-
-    if (!newDishPrice || isNaN(parseFloat(newDishPrice))) {
-      alert('Please enter a valid price'); //Enters a new dish to the menu
-      return;
-    }
-
-    const newDish: MenuItem = {
-      name: newDishName,
-      description: newDishDescription,
-      course: newDishCourse,
-      price: parseFloat(newDishPrice),
-    };
-
-    setMenuItems([...menuItems, newDish]);
-
-    // Clear the input fields after submission
-    setNewDishName('');
-    setNewDishDescription('');
-    setNewDishPrice('');
-  };
+  // Calculate average price for each course
+  const averageStartersPrice = calculateAveragePrice(menuItems, 'Starter');
+  const averageMainsPrice = calculateAveragePrice(menuItems, 'Main');
+  const averageDessertsPrice = calculateAveragePrice(menuItems, 'Dessert');
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.headingContainer}>
-        <Text style={styles.appName}>Eclipse Restaurant Menu</Text>
-      </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* Menu Screen */}
+        <Stack.Screen name="Menu" options={{ title: 'Eclipse Restaurant Menu' }}>
+          {({ navigation }) => (
+            <SafeAreaView style={styles.container}>
+              <StatusBar style="auto" />
+              <View style={styles.headingContainer}>
+                <Text style={styles.appName}>Eclipse Restaurant Menu</Text>
+              </View>
 
-      <FlatList //renders a scrollable view on the screen
-        data={menuItems}
-        keyExtractor={(item) => item.name + item.price}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemText}>
-              {item.name} - {item.description} ({item.course})
-            </Text>
-            <View style={styles.priceContainer}>
-              <Text style={styles.priceText}>R{item.price.toFixed(2)}</Text>
-            </View>
-          </View>
-        )}
-      />
+              {/* Filter buttons */}
+              <View style={styles.filterContainer}>
+                {['Starter', 'Main', 'Dessert', ''].map(course => (
+                  <TouchableOpacity
+                    key={course}
+                    style={styles.filterButton}
+                    onPress={() => setFilter(course)}
+                  >
+                    <Text style={styles.filterText}>{course ? `${course}s` : 'All'}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
 
-      <Text style={styles.totalItems}>Total Menu Items: {totalMenuItems}</Text>
+              {/* Display average prices */}
+              <View>
+                <Text>Average Starters Price: R{averageStartersPrice.toFixed(2)}</Text>
+                <Text>Average Mains Price: R{averageMainsPrice.toFixed(2)}</Text>
+                <Text>Average Desserts Price: R{averageDessertsPrice.toFixed(2)}</Text>
+              </View>
 
-      {/* Input Fields to Add a New Dish */}
-      <ScrollView style={styles.inputSection}>
-        <Text style={styles.sectionTitle}>Add a New Dish</Text>
+              {/* FlatList for displaying menu items */}
+              <FlatList
+                data={filteredMenuItems}
+                keyExtractor={(item) => item.id} // Use item.id as key
+                renderItem={({ item }) => (
+                  <View style={styles.itemContainer}>
+                    <Text style={styles.itemText}>
+                      {item.name} - {item.description} ({item.course})
+                    </Text>
+                    <View style={styles.priceContainer}>
+                      <Text style={styles.priceText}>R{item.price.toFixed(2)}</Text>
+                    </View>
+                  </View>
+                )}
+              />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Dish Name"
-          value={newDishName}
-          onChangeText={setNewDishName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Dish Description"
-          value={newDishDescription}
-          onChangeText={setNewDishDescription}
-        />
-        <Picker
-          selectedValue={newDishCourse}
-          style={styles.picker}
-          onValueChange={(itemValue) => setNewDishCourse(itemValue)}
-        >
-          <Picker.Item label="Starters" value="Starters" /> 
-          <Picker.Item label="Main" value="Main" />  
-          <Picker.Item label="Desserts" value="Desserts" />  
-        </Picker>
-        <TextInput
-          style={styles.input}
-          placeholder="Price (R)"
-          keyboardType="numeric"
-          value={newDishPrice}
-          onChangeText={setNewDishPrice}
-        />
-{/*Stackoverflow, 2024
-  React typescript onClick event typing
-  Stackoverflow
-  https://stackoverflow.com/questions/70907199/react-typescript-onclick-event-typing
-  [Accessed 30 September 2024].*/}
+              <Text style={styles.totalItems}>Total Menu Items: {filteredMenuItems.length}</Text>
 
-        <TouchableOpacity style={styles.addButton} onPress={handleAddDish}>
-          <Text style={styles.buttonText}>Add Dish</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+              {/* Navigate to Manage Menu screen */}
+              <TouchableOpacity
+                style={styles.navigateButton}
+                onPress={() => navigation.navigate('Manage Menu', { menuItems, setMenuItems })}
+              >
+                <Text style={styles.buttonText}>Manage Menu</Text>
+              </TouchableOpacity>
+            </SafeAreaView>
+          )}
+        </Stack.Screen>
+
+        {/* Manage Menu Screen */}
+        <Stack.Screen name="Manage Menu">
+          {({ route, navigation }) => (
+            <ManageMenuScreen
+              navigation={navigation}
+              route={route} // Pass both navigation and route props
+            />
+          )}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-{/* IIEVC School of Computer Science, 2024
+
+/*Stackoverflow, 2024
+  React typescript onClick event typing
+  Stackoverflow
+  https://stackoverflow.com/questions/70907199/react-typescript-onclick-event-typing
+  [Accessed 30 September 2024].*/
+
+/* IIEVC School of Computer Science, 2024
    MAST5112 Guru 02 - Basic UI Design React Native UI Components Fitness Tracker
    IIEVC School of Computer Science
    https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
-   [Accessed 28 September 2024]. */}
-
-// Styles for the app UI
+   [Accessed 28 September 2024]. */
+   
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f3e5ab',
-    marginVertical: 1, //margin for the container
     padding: 20,
   },
   headingContainer: {
     backgroundColor: '#ffb756',
     justifyContent: 'center',
-    marginBottom: 20, //creates a margin for the heading container
+    marginBottom: 20,
     alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 10,
@@ -150,7 +140,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#d2691e',
   },
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  filterButton: {
+    backgroundColor: '#ffdb13',
+    padding: 10,
+    borderRadius: 8,
+  },
+  filterText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ff6347',
@@ -162,71 +169,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#d2691e',
   },
-
   priceContainer: {
     backgroundColor: '#ffdb13',
     padding: 5,
     borderRadius: 10,
-    marginTop: 5,
-  
   },
-
   priceText: {
     fontSize: 18,
     color: 'black',
     fontWeight: 'bold',
-
   },
-
   totalItems: {
-    marginTop: 20, //adds a margin to the total items
+    marginTop: 20,
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',
   },
-  inputSection: {
-    marginTop: 30,
-    backgroundColor: '#fff9e6',
-    padding: 15,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#d2691e',
-    textAlign: 'center',
-  },
-  input: {
-    height: 45,
-    borderColor: '#d2691e',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 12,
-    paddingLeft: 10,
-    backgroundColor: '#ffffff',
-  },
-  picker: {
-    height: 50,
-    marginBottom: 12, //creates a margin for the picker container
-    borderColor: '#d2691e',
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  addButton: {
-    backgroundColor: '#4682b4',
+  navigateButton: {
+    backgroundColor: '#fff301',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
   buttonText: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
     fontSize: 16,
   },
