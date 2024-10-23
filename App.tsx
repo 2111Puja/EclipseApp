@@ -3,8 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ManageMenuScreen from './ManageMenuScreen'; // Import your ManageMenuScreen
-import { MenuItem, RootStackParamList } from './types'; // Import types
+import ManageMenuScreen from './ManageMenuScreen';
+import FilterMenuScreen from './FilterMenuScreen';
+import { MenuItem, RootStackParamList } from './types';
 
 // Create the stack navigator
 const Stack = createStackNavigator<RootStackParamList>();
@@ -21,12 +22,6 @@ const calculateAveragePrice = (items: MenuItem[], course: string) => {
 export default function App() {
   const initialDishes: MenuItem[] = []; // Initial state for menu items
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialDishes);
-  const [filter, setFilter] = useState<string>(''); // For course filtering
-
-  // Filter menu items based on the selected course
-  const filteredMenuItems = filter
-    ? menuItems.filter(item => item.course === filter)
-    : menuItems;
 
   // Calculate average price for each course
   const averageStartersPrice = calculateAveragePrice(menuItems, 'Starter');
@@ -45,35 +40,29 @@ export default function App() {
                 <Text style={styles.appName}>Eclipse Restaurant Menu</Text>
               </View>
 
-              {/* Filter buttons */}
-              <View style={styles.filterContainer}>
-                {['Starter', 'Main', 'Dessert', ''].map(course => (
-                  <TouchableOpacity
-                    key={course}
-                    style={styles.filterButton}
-                    onPress={() => setFilter(course)}
-                  >
-                    <Text style={styles.filterText}>{course ? `${course}s` : 'All'}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
               {/* Display average prices */}
-              <View>
-                <Text>Average Starters Price: R{averageStartersPrice.toFixed(2)}</Text>
-                <Text>Average Mains Price: R{averageMainsPrice.toFixed(2)}</Text>
-                <Text>Average Desserts Price: R{averageDessertsPrice.toFixed(2)}</Text>
+              <View style={styles.averagePriceContainer}>
+                <Text style={styles.averagePriceText}>Average Starters Price: R{averageStartersPrice.toFixed(2)}</Text>
+                <Text style={styles.averagePriceText}>Average Mains Price: R{averageMainsPrice.toFixed(2)}</Text>
+                <Text style={styles.averagePriceText}>Average Desserts Price: R{averageDessertsPrice.toFixed(2)}</Text>
               </View>
 
               {/* FlatList for displaying menu items */}
               <FlatList
-                data={filteredMenuItems}
-                keyExtractor={(item) => item.id} // Use item.id as key
+                data={menuItems} // Display all menu items without filtering
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <View style={styles.itemContainer}>
-                    <Text style={styles.itemText}>
-                      {item.name} - {item.description} ({item.course})
-                    </Text>
+                    {/* Dish name */}
+                    <Text style={styles.dishName}>{item.name}</Text>
+
+                    {/* Dish description */}
+                    <Text style={styles.dishDescription}>{item.description}</Text>
+
+                    {/* Course type */}
+                    <Text style={styles.courseType}>{item.course}</Text>
+
+                    {/* Price */}
                     <View style={styles.priceContainer}>
                       <Text style={styles.priceText}>R{item.price.toFixed(2)}</Text>
                     </View>
@@ -81,7 +70,7 @@ export default function App() {
                 )}
               />
 
-              <Text style={styles.totalItems}>Total Menu Items: {filteredMenuItems.length}</Text>
+              <Text style={styles.totalItems}>Total Menu Items: {menuItems.length}</Text>
 
               {/* Navigate to Manage Menu screen */}
               <TouchableOpacity
@@ -89,6 +78,14 @@ export default function App() {
                 onPress={() => navigation.navigate('Manage Menu', { menuItems, setMenuItems })}
               >
                 <Text style={styles.buttonText}>Manage Menu</Text>
+              </TouchableOpacity>
+
+              {/* Navigate to Filter Menu Screen */}
+              <TouchableOpacity
+                style={styles.navigateButton}
+                onPress={() => navigation.navigate('FilterMenu', { items: menuItems, navigation })}
+              >
+                <Text style={styles.buttonText}>Advanced Filters</Text>
               </TouchableOpacity>
             </SafeAreaView>
           )}
@@ -103,11 +100,15 @@ export default function App() {
             />
           )}
         </Stack.Screen>
+
+        {/* Filter Menu Screen */}
+        <Stack.Screen name="FilterMenu">
+          {({ route, navigation }) => <FilterMenuScreen items={route.params.items} navigation={navigation} route={undefined} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 
 /*Stackoverflow, 2024
   React typescript onClick event typing
@@ -120,7 +121,7 @@ export default function App() {
    IIEVC School of Computer Science
    https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
    [Accessed 28 September 2024]. */
-   
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -140,44 +141,58 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#d2691e',
   },
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  filterButton: {
+  averagePriceContainer: {
     backgroundColor: '#ffdb13',
-    padding: 10,
-    borderRadius: 8,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    alignItems: 'center',
   },
-  filterText: {
-    color: 'black',
+  averagePriceText: {
+    fontSize: 18,
+    color: '#8b4513',
     fontWeight: 'bold',
-    fontSize: 16,
   },
   itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ff6347',
-    backgroundColor: '#fff9e6',
+    borderWidth: 1,
+    borderColor: '#800000',
+    backgroundColor: '#fdf4e3',
     marginBottom: 10,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
-  itemText: {
-    fontSize: 16,
+  dishName: {
+    fontSize: 22,
+    fontWeight: 'bold',
     color: '#d2691e',
+    marginBottom: 5,
+  },
+  dishDescription: {
+    fontSize: 16,
+    color: '#8b4513',
+    marginBottom: 5,
+  },
+  courseType: {
+    fontSize: 16,
+    color: '#a0522d',
+    fontStyle: 'italic',
   },
   priceContainer: {
-    backgroundColor: '#ffdb13',
-    padding: 5,
-    borderRadius: 10,
+    flex: 1,
+    alignItems: 'flex-end', 
   },
   priceText: {
     fontSize: 18,
     color: 'black',
     fontWeight: 'bold',
+    backgroundColor: '#ffe747', 
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    borderRadius: 5, 
   },
   totalItems: {
     marginTop: 20,
@@ -187,7 +202,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   navigateButton: {
-    backgroundColor: '#fff301',
+    backgroundColor: '#ffb74d',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',

@@ -13,6 +13,11 @@ export type MenuItem = {
     'Manage Menu': {
       menuItems: MenuItem[];
       setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>;
+
     };
+    
+    Filter: undefined;
+    FilterMenu: {
+    items: MenuItem[];
   };
-  
+}

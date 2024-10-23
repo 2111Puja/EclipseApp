@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { FlatList } from 'react-native-gesture-handler';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // Define props type for navigation
 type FilterMenuScreenProps = {
-  items: { id: string; name: string; type: string; }[]; // Adjust type based on your items structure
+  navigation: StackNavigationProp<any>; // Update the type based on your navigator structure
+  route: any; // You can define the route params if needed
+  items: { id: string; name: string; course: string; }[]; // Adjust type based on your items structure
 };
 
-const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items }) => {
+const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items, navigation }) => {
   const [selectedType, setSelectedType] = useState('Starter');
-  const filteredItems = items.filter(item => item.type === selectedType);
+  const filteredItems = items.filter(item => item.course === selectedType);
 
+  const handleItemPress = (itemId: string) => {
+    // Navigate to another screen or handle item press
+    navigation.navigate('ItemDetail', { itemId }); // Update 'ItemDetail' to your actual screen name
+  };
+
+  // Ensure the function returns JSX
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Filter Menu By Course</Text>
@@ -21,7 +30,7 @@ const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items }) => {
         style={styles.picker}
       >
         <Picker.Item label="Starter" value="Starter" />
-        <Picker.Item label="Main Course" value="Main Course" />
+        <Picker.Item label="Main" value="Main" />
         <Picker.Item label="Dessert" value="Dessert" />
       </Picker>
 
@@ -29,14 +38,17 @@ const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items }) => {
         data={filteredItems}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemText}>{item.name}</Text>
-          </View>
+          <TouchableOpacity onPress={() => handleItemPress(item.id)}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.itemText}>{item.name}</Text>
+            </View>
+          </TouchableOpacity>
         )}
       />
     </View>
   );
 };
+
 /*Stackoverflow, 2024
   React typescript onClick event typing
   Stackoverflow
@@ -48,8 +60,7 @@ const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items }) => {
    IIEVC School of Computer Science
    https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
    [Accessed 28 September 2024]. */
-
-// Styles
+  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -62,26 +73,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#d2691e', // Matches the color palette for consistency
+    color: '#d2691e',
   },
   picker: {
-    width: '80%',
     height: 50,
-    backgroundColor: '#ffdb13', // Yellow background to match your theme
-    borderRadius: 8,
+    width: 200,
+    backgroundColor: '#ffdb13',
     marginBottom: 20,
   },
   itemContainer: {
-    padding: 15,
-    backgroundColor: '#fff',
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: '#fff9e6',
     borderRadius: 8,
-    marginBottom: 10,
     width: '100%',
     alignItems: 'center',
   },
   itemText: {
     fontSize: 18,
-    color: '#d2691e', // Matches the text color of other UI elements
+    color: '#d2691e',
   },
 });
 

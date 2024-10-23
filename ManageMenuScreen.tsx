@@ -2,35 +2,28 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MenuItem, RootStackParamList } from './App'; 
+import { MenuItem, RootStackParamList } from './types';
 import { Picker } from '@react-native-picker/picker';
-import { Dispatch, SetStateAction } from 'react';
 
-// Define the props for the ManageMenuScreen
-// Define the props for the ManageMenuScreen component
 type ManageMenuScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'Manage Menu'>; // Handles navigation
-  route: RouteProp<RootStackParamList, 'Manage Menu'>; // Handles the route parameters
+  navigation: StackNavigationProp<RootStackParamList, 'Manage Menu'>;
+  route: RouteProp<RootStackParamList, 'Manage Menu'>;
 };
 
-// ManageMenuScreen component
 const ManageMenuScreen: React.FC<ManageMenuScreenProps> = ({ route, navigation }) => {
-  const { menuItems, setMenuItems } = route.params; // Extract parameters from route
-
+  const { menuItems, setMenuItems } = route.params;
 
   const [newItem, setNewItem] = useState<MenuItem>({ id: '', name: '', description: '', course: '', price: 0 });
 
-  // Function to handle adding a new menu item
   const addMenuItem = () => {
     if (newItem.name && newItem.course && newItem.price > 0) {
-      setMenuItems(prevItems => [...prevItems, newItem]); // Use functional update
+      setMenuItems(prevItems => [...prevItems, newItem]);
       setNewItem({ id: '', name: '', description: '', course: '', price: 0 });
     } else {
       alert('Please fill in all fields with valid values');
     }
   };
 
-  // Function to remove a menu item by index
   const removeMenuItem = (index: number) => {
     const updatedItems = menuItems.filter((item, i) => i !== index);
     setMenuItems(updatedItems);
@@ -75,7 +68,9 @@ const ManageMenuScreen: React.FC<ManageMenuScreenProps> = ({ route, navigation }
       />
 
       {/* Add button */}
-      <Button title="Add Menu Item" onPress={addMenuItem} />
+      <TouchableOpacity style={styles.addButton} onPress={addMenuItem}>
+        <Text style={styles.addButtonText}>Add Menu Item</Text>
+      </TouchableOpacity>
 
       {/* List of current menu items with delete functionality */}
       <FlatList
@@ -83,9 +78,14 @@ const ManageMenuScreen: React.FC<ManageMenuScreenProps> = ({ route, navigation }
         keyExtractor={(item, index) => `${item.name}-${index}`}
         renderItem={({ item, index }) => (
           <View style={styles.itemContainer}>
-            <Text style={styles.itemText}>
-              {item.name} - {item.description} ({item.course}) - R{item.price.toFixed(2)}
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.dishName}>{item.name}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+              <Text style={styles.course}>{item.course}</Text>
+            </View>
+            <View style={styles.priceContainer}>
+              <Text style={styles.price}>{`R${item.price.toFixed(2)}`}</Text>
+            </View>
             <TouchableOpacity style={styles.deleteButton} onPress={() => removeMenuItem(index)}>
               <Text style={styles.deleteButtonText}>Delete</Text>
             </TouchableOpacity>
@@ -96,7 +96,6 @@ const ManageMenuScreen: React.FC<ManageMenuScreenProps> = ({ route, navigation }
   );
 };
 
-// Styles for the ManageMenuScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -104,50 +103,92 @@ const styles = StyleSheet.create({
     backgroundColor: '#f3e5ab',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#d2691e',
+    color: '#3e2723',
   },
   input: {
-    borderColor: '#d2691e',
+    borderColor: '#d4a373',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8,
     padding: 10,
-    marginBottom: 10,
-    backgroundColor: '#fff9e6',
+    marginBottom: 15,
+    backgroundColor: '#ffffff',
+    fontSize: 16,
   },
   picker: {
     height: 50,
     width: '100%',
-    marginBottom: 10,
-    borderColor: '#d2691e',
+    marginBottom: 15,
+    borderColor: '#d4a373',
     borderWidth: 1,
-    borderRadius: 5,
-    backgroundColor: '#fff9e6',
+    borderRadius: 8,
+    backgroundColor: '#ffffff',
+  },
+  addButton: {
+    backgroundColor: '#ffb74d',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
   },
   itemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ff6347',
-    backgroundColor: '#fff9e6',
+    borderBottomColor: '#A0522D',
+    borderColor: '#800000',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     marginBottom: 10,
   },
-  itemText: {
+  textContainer: {
+    flex: 3,
+  },
+  priceContainer: {
+    flex: 1,
+    backgroundColor: '#ffe747', 
+    padding: 5,
+    alignItems: 'flex-end',
+    borderRadius: 20,
+  },
+  price: {
     fontSize: 16,
-    color: '#d2691e',
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  dishName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#795548',
+  },
+  description: {
+    fontSize: 16,
+    color: '#6d4c41',
+    marginBottom: 5,
+  },
+  course: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: '#8d6e63',
   },
   deleteButton: {
-    backgroundColor: '#ff6347',
-    padding: 5,
-    borderRadius: 5,
+    backgroundColor: '#ff7043',
+    padding: 8,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   deleteButtonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
   },
 });
