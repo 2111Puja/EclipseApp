@@ -96,6 +96,18 @@ const ManageMenuScreen: React.FC<ManageMenuScreenProps> = ({ route, navigation }
   );
 };
 
+/*Stackoverflow, 2024
+  React typescript onClick event typing
+  Stackoverflow
+  https://stackoverflow.com/questions/70907199/react-typescript-onclick-event-typing
+  [Accessed 30 September 2024].*/
+
+/* IIEVC School of Computer Science, 2024
+   MAST5112 Guru 02 - Basic UI Design React Native UI Components Fitness Tracker
+   IIEVC School of Computer Science
+   https://www.youtube.com/watch?v=BNzC7QyoPNk&list=PL480DYS-b_kfYdAhBTh7U6fzNlE3ME7MD&index=8&ab_channel=IIEVCSchoolofComputerScience
+   [Accessed 28 September 2024]. */
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
