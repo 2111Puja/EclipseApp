@@ -6,9 +6,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 // Define props type for navigation
 type FilterMenuScreenProps = {
-  navigation: StackNavigationProp<any>; // Update the type based on your navigator structure
-  route: any; // You can define the route params if needed
-  items: { id: string; name: string; course: string; }[]; // Adjust type based on your items structure
+  navigation: StackNavigationProp<any>; 
+  route: any; 
+  items: { id: string; name: string; course: string; }[]; 
 };
 
 const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items, navigation }) => {
@@ -17,10 +17,9 @@ const FilterMenuScreen: React.FC<FilterMenuScreenProps> = ({ items, navigation }
 
   const handleItemPress = (itemId: string) => {
     // Navigate to another screen or handle item press
-    navigation.navigate('ItemDetail', { itemId }); // Update 'ItemDetail' to your actual screen name
+    navigation.navigate('ItemDetail', { itemId }); 
   };
 
-  // Ensure the function returns JSX
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Filter Menu By Course</Text>
