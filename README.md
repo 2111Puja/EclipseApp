@@ -2,8 +2,8 @@
 This project is a React Native application that is coded in Typescript and is for managing and displaying the menu of Eclipse Restaurant. The app allows a Chef to view menu items, filter them by course (Starters, Mains, Desserts), enter the dish name, dish description and price of a dish item and calculate the average price of each course. Additionally, there is a screen for managing the menu where the Chef can add, edit, or remove items.
 
 ## What is needed to run this app?
-*If you're using React Native, you can say npm expo start in the terminal.
-*You can also run the app on Expo Go on your phone or scan the QR code displayed in the terminal.
+1. If you're using React Native, you can say npm expo start in the terminal.
+2. You can also run the app on Expo Go on your phone or scan the QR code displayed in the terminal.
 
 ## Features and Screens:
 1. Menu Display (MainScreen) : View a list of menu items, including the name, description, course and price.
