@@ -1,6 +1,6 @@
 # Eclipse Restaurant Menu App:
 The Eclipse Restaurant Menu App is a React Native application coded in TypeScript, designed for managing and displaying the menu of Eclipse Restaurant. This app enables a chef to:
-+ View menu items and filter them by course (Starters, Mains, Desserts)
++ View menu items and filter them by course (Starter, Main, Dessert)
 + Enter and edit details for each dish, including name, description, and price
 + Calculate the average price of each course
 
@@ -42,7 +42,7 @@ Added:
 ## Refractoring:
 + I edited how the prices display on the menu by making the container that it was in smaller.
 + I edited how the price of the dishes in the manage menu screen display.
-+ Ensured that the dish, description and price display one below the other - changed the font sizes of the dish name name and made the course font type italics.
++ Ensured that the dish, description and price display one below the other - changed the font sizes of the dish name and made the course font type italics.
 
 
 
