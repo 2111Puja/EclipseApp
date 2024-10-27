@@ -32,14 +32,14 @@ This app uses react-navigation with a stack navigator to manage different screen
 ## Changelog: 
 Added:
 + Implemented the Menu Screen on the MainScreen to display restaurant menu items including name, description, course, and price.
-+ Introduced filtering functionality to filter menu items by course (Starters, Mains, Desserts, or All) on the Advanced Filters Screen.
++ Introduced filtering functionality to filter menu items by course (Starter, Main, Dessert) on the Advanced Filters Screen.
 + Calculated and displayed the average price for each course on the Menu Screen.
 + Created the Manage Menu Screen to add, update, or remove menu items.
 + Added navigation using React Navigation with a stack navigator between the Menu Screen and Manage Menu Screen.
 + Styled the app with a custom theme, including colours and layout.
 + Ensured that the dish name, description and price display one below the other. The dish name is in a larger font size than the description and price.
 
-##Refractoring:
+## Refractoring:
 + I edited how the prices display on the menu by making the container that it was in smaller.
 + I edited how the price of the dishes in the manage menu screen display.
 + Ensured that the dish, description and price display one below the other - changed the font sizes of the dish name name and made the course font type italics.
