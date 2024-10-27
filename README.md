@@ -39,7 +39,7 @@ Added:
 + Styled the app with a custom theme, including colours and layout.
 + Ensured that the dish name, description and price display one below the other. The dish name is in a larger font size than the description and price.
 
-## Refractoring:
+## Refactoring:
 + I edited how the prices display on the menu by making the container that it was in smaller.
 + I edited how the price of the dishes in the manage menu screen display.
 + Ensured that the dish, description and price display one below the other - changed the font sizes of the dish name and made the course font type italics.
